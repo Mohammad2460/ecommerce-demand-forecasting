@@ -14,7 +14,7 @@ FIGURES = ROOT / "reports" / "figures"
 
 # Known Olist coverage gaps: 2016 is sparse, data after Aug 2018 is partial.
 ANALYSIS_START = "2017-01-01"
-ANALYSIS_END = "2018-08-31"
+ANALYSIS_END = "2018-08-19"  # order volume collapses after ~Aug 20 (extraction cutoff)
 
 FORECAST_FREQ = "W-MON"  # weekly buckets, labelled by week start (Monday)
 FORECAST_HORIZON = 8  # weeks

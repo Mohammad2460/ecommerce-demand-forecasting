@@ -157,7 +157,9 @@ def generate(n_orders: int = 20000, seed: int = 42) -> dict[str, pd.DataFrame]:
         "order_status": status,
         "order_purchase_timestamp": purchase_ts,
         "order_approved_at": approved,
-        "order_delivered_carrier_date": carrier.where(~np.isin(status, ["canceled", "unavailable", "invoiced", "processing"])),
+        "order_delivered_carrier_date": carrier.where(
+            ~np.isin(status, ["canceled", "unavailable", "invoiced", "processing"])
+        ),
         "order_delivered_customer_date": delivered.where(~not_del),
         "order_estimated_delivery_date": estimated,
     })

@@ -41,8 +41,8 @@ not hardcoded paths, or tests will leak into real outputs.
 
 **Layers** (each consumes the previous layer's parquet output in `data/processed/`):
 1. `data/load.py` → raw CSVs with parsed dates (translation CSV has a UTF-8 BOM; zips read as str).
-2. `data/clean.py` → delivered orders only within `ANALYSIS_START..ANALYSIS_END` (2017-01 → 2018-08;
-   2016 is sparse and post-Aug-2018 is partial in Olist). Reviews and payments collapsed to one row per order.
+2. `data/clean.py` → delivered orders only within `ANALYSIS_START..ANALYSIS_END` (2017-01-01 → 2018-08-19;
+   2016 is sparse and order volume collapses from ~2018-08-20 in the Olist extract). Reviews and payments collapsed to one row per order.
 3. `data/warehouse.py` → star schema parquet (fact order items + customer/product/date dims).
 4. `features/`, `forecasting/`, `segmentation/`, `churn/`, `clv/`, `insights/` → models to `models/`
    (joblib) and result tables to `data/processed/`.
