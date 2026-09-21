@@ -67,7 +67,7 @@ Design principles:
 
 - **Training never happens at request time.** The pipeline (`make pipeline`, about 35 s on the full data) writes artefacts, and the serving layers only read them.
 - **Point-in-time correctness.** Customer features take a `snapshot` date and ignore later orders. Churn labels come strictly from the window after it.
-- **Reproducible and testable.** Every path resolves through `config.py`. The test suite (28 tests) runs the whole pipeline on a synthetic dataset with the exact Olist schema, so the tests never touch real data.
+- **Reproducible and testable.** Every path resolves through `config.py`. The test suite (35 tests, run by GitHub Actions CI on Python 3.11 and 3.12) runs the whole pipeline, the API and every dashboard page on a synthetic dataset with the exact Olist schema, so the tests never touch real data.
 
 ## 5. Demand forecasting
 
@@ -228,7 +228,7 @@ make install     # uv sync
 make data        # download Olist from Kaggle's public endpoint into data/raw/olist
 make pipeline    # warehouse → forecasting → customers → insights (~35 s)
 make notebooks   # re-execute notebooks/01–03
-make test        # 28 tests on synthetic Olist-schema data
+make test        # 35 tests on synthetic Olist-schema data
 make api         # http://localhost:8000/docs
 make dashboard   # http://localhost:8501
 ```

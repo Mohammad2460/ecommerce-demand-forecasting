@@ -12,17 +12,21 @@ under `src/ecom/`, managed with `uv`. Serving layer: FastAPI (`ecom.api`) + Stre
 
 ```bash
 uv sync                                   # install deps (Python venv in .venv)
-make test                                 # uv run pytest (all tests, synthetic data)
+make data                                 # download real Olist CSVs into data/raw/olist (public endpoint)
+make test                                 # uv run pytest (all tests, synthetic data; CI runs this on 3.11/3.12)
 uv run pytest tests/test_data.py::test_clean_orders_filters_status_and_window   # single test
 make lint                                 # ruff check src tests scripts
 make sample                               # regenerate synthetic Olist-schema CSVs in data/raw/sample
 make pipeline                             # end-to-end build: warehouse -> features -> models -> outputs
+make notebooks                            # re-execute notebooks/01-03 (reads data/processed; run pipeline first)
 make api                                  # FastAPI on :8000
 make dashboard                            # Streamlit app
 ```
 
-Re-download real data (public endpoint, no Kaggle login needed):
-`curl -L -o olist.zip https://www.kaggle.com/api/v1/datasets/download/olistbr/brazilian-ecommerce && unzip -o olist.zip -d data/raw/olist`
+After changing a model or the data window: `make pipeline && make notebooks`, then update the numbers quoted
+in `docs/report.md` and `README.md` (they are hand-written from pipeline outputs, not generated).
+
+Commits: plain conventional-commit messages, no AI co-author/attribution trailers (author's explicit rule).
 
 ### macOS import gotcha
 The editable-install `.pth` in `.venv` can get the macOS `hidden` flag, which makes Python silently
@@ -52,6 +56,8 @@ not hardcoded paths, or tests will leak into real outputs.
    `store.clear()` or POST `/admin/reload` after re-running the pipeline) — never train at request time.
    The dashboard is an `st.navigation` router (`dashboard/app.py`) over `dashboard/pages/*.py`; shared
    theme/palette lives in `dashboard/common.py`, and charts pass `theme=None` so Streamlit doesn't override it.
+   Use `width="stretch"`, not the removed `use_container_width`. `tests/test_dashboard.py` renders every page
+   headlessly with `streamlit.testing.v1.AppTest`, so add new pages to its parametrize list.
    The dashboard's what-if scorer calls the API's `churn_score` function directly (single source of logic).
 
 **Forecast outputs:** `forecast.parquet` holds every model's forecast for every series; `is_best` flags the

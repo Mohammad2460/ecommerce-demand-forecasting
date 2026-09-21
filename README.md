@@ -1,5 +1,7 @@
 # Intelligent E-Commerce Demand Forecasting & Customer Analytics System
 
+[![CI](https://github.com/Mohammad2460/ecommerce-demand-forecasting/actions/workflows/ci.yml/badge.svg)](https://github.com/Mohammad2460/ecommerce-demand-forecasting/actions/workflows/ci.yml)
+
 Capstone project on the [Olist Brazilian E-Commerce dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
 (~100k orders, 2016–2018). It forecasts weekly category demand, segments customers, scores repeat-purchase
 propensity and lifetime value, and serves everything through a REST API and an interactive dashboard.
@@ -31,7 +33,7 @@ make api         # FastAPI on http://localhost:8000 (interactive docs at /docs)
 Without the real data, `make sample` generates a synthetic dataset with the exact Olist schema into
 `data/raw/sample/`, and the pipeline uses it automatically.
 
-Other targets: `make test` (28 tests, synthetic data), `make lint`, `make notebooks` (re-execute notebooks).
+Other targets: `make test` (35 tests incl. API and dashboard pages, synthetic data; run in CI), `make lint`, `make notebooks` (re-execute notebooks).
 Docker: `docker compose run --rm pipeline` then `docker compose up api dashboard` (provided but untested).
 
 ## What's inside
