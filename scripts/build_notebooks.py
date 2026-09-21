@@ -60,21 +60,21 @@ NOTEBOOKS = {
                  "fig.savefig('../reports/figures/06_total_forecast.png', bbox_inches='tight')"),
     ],
     "03_customers.ipynb": [
-        ("md", "# 03 · Customer Analytics\\nRFM segmentation, K-Means behavioural clusters, repeat-purchase "
+        ("md", "# 03 · Customer Analytics\nRFM segmentation, K-Means behavioural clusters, repeat-purchase "
                "(churn) propensity with out-of-time validation, 12-month revenue CLV, and category affinity."),
-        ("code", SETUP + "\\nimport matplotlib.pyplot as plt\\nP = '../data/processed/'\\n"
+        ("code", SETUP + "\nimport matplotlib.pyplot as plt\nP = '../data/processed/'\n"
                  "c = pd.read_parquet(P + 'customers.parquet'); c.shape"),
         ("md", "## RFM segments"),
         ("code", "seg = pd.read_parquet(P + 'segment_summary.parquet'); seg.round(3)"),
-        ("code", "fig, ax = plt.subplots(figsize=(9, 4))\\n"
-                 "ax.barh(seg.segment, seg.share_customers, label='customers', alpha=.7)\\n"
-                 "ax.barh(seg.segment, seg.share_revenue, label='revenue', alpha=.5)\\n"
-                 "ax.invert_yaxis(); ax.legend(); ax.set_title('Share of customers vs revenue by RFM segment')\\n"
+        ("code", "fig, ax = plt.subplots(figsize=(9, 4))\n"
+                 "ax.barh(seg.segment, seg.share_customers, label='customers', alpha=.7)\n"
+                 "ax.barh(seg.segment, seg.share_revenue, label='revenue', alpha=.5)\n"
+                 "ax.invert_yaxis(); ax.legend(); ax.set_title('Share of customers vs revenue by RFM segment')\n"
                  "fig.savefig('../reports/figures/07_rfm_segments.png', bbox_inches='tight')"),
-        ("md", "## K-Means clusters\\nk chosen by silhouette score on a 10k sample."),
+        ("md", "## K-Means clusters\nk chosen by silhouette score on a 10k sample."),
         ("code", "pd.read_parquet(P + 'cluster_k_scores.parquet').round(3)"),
         ("code", "pd.read_parquet(P + 'cluster_profile.parquet').round(2)"),
-        ("md", "## Repeat-purchase (churn) model\\nTrain: 4 stacked cutoffs whose 180-day label windows end "
+        ("md", "## Repeat-purchase (churn) model\nTrain: 4 stacked cutoffs whose 180-day label windows end "
                "before the test cutoff. Test: customers as of the test cutoff. Positive class = repurchase."),
         ("code", "pd.read_parquet(P + 'churn_metrics.parquet').round(4)"),
         ("code", "pd.read_parquet(P + 'churn_importance.parquet').head(10)"),
