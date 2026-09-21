@@ -87,7 +87,11 @@ curl -X POST localhost:8000/churn/score -H 'content-type: application/json' \
 - **Limitations** (short history, rare repeat purchases, revenue-only CLV) are discussed in
   [the report](docs/report.md#9-limitations-and-future-work).
 
-## Data & license
+## License
+
+Code: [MIT](LICENSE). Data: see below.
+
+## Data
 
 Data: *Brazilian E-Commerce Public Dataset by Olist*, published on Kaggle under
 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). The raw data is not included in this
