@@ -23,7 +23,7 @@ fig = go.Figure(
         hovertemplate="%{x}<br>R$ %{y:,.0f} (%{customdata[0]:.1%})<br>%{customdata[1]:,} orders<extra></extra>",
     )
 )
-a.plotly_chart(style(fig, 360, title="Revenue by customer state (top 15, R$)"), use_container_width=True, theme=None)
+a.plotly_chart(style(fig, 360, title="Revenue by customer state (top 15, R$)"), width="stretch", theme=None)
 
 big = st_perf[st_perf["orders"] >= 200]
 fig = go.Figure(
@@ -46,7 +46,7 @@ fig.update_xaxes(tickformat=".0%", title="late delivery rate", showgrid=True, gr
 fig.update_yaxes(title="avg review score")
 b.plotly_chart(
     style(fig, 360, title="Late deliveries drag reviews down (states with 200+ orders)"),
-    use_container_width=True,
+    width="stretch",
     theme=None,
 )
 
@@ -66,7 +66,7 @@ st.dataframe(
         }
     ),
     hide_index=True,
-    use_container_width=True,
+    width="stretch",
     height=300,
 )
 
@@ -85,7 +85,7 @@ fig = go.Figure(
         hovertemplate="%{y}: %{x:,} units<extra></extra>",
     )
 )
-a.plotly_chart(style(fig, 30 * n + 80, title="Units sold"), use_container_width=True, theme=None)
+a.plotly_chart(style(fig, 30 * n + 80, title="Units sold"), width="stretch", theme=None)
 fig = go.Figure(
     go.Bar(
         y=[pretty(c) for c in view["category"]][::-1],
@@ -96,7 +96,7 @@ fig = go.Figure(
     )
 )
 fig.update_xaxes(range=[3, 5])
-b.plotly_chart(style(fig, 30 * n + 80, title="Average review (axis starts at 3)"), use_container_width=True, theme=None)
+b.plotly_chart(style(fig, 30 * n + 80, title="Average review (axis starts at 3)"), width="stretch", theme=None)
 
 st.divider()
 st.subheader("Category affinity (market basket)")
@@ -116,5 +116,5 @@ st.dataframe(
     .assign(antecedent=lambda d: d["antecedent"].map(pretty), consequent=lambda d: d["consequent"].map(pretty))
     .style.format({"support": "{:.4%}", "confidence": "{:.2%}", "lift": "{:.2f}"}),
     hide_index=True,
-    use_container_width=True,
+    width="stretch",
 )

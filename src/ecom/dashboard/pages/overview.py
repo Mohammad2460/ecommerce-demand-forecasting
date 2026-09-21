@@ -73,7 +73,7 @@ fig.add_scatter(
 )
 left.plotly_chart(
     style(fig, 380, title="Weekly units sold: history and 8-week forecast", hovermode="x unified"),
-    use_container_width=True,
+    width="stretch",
     theme=None,
 )
 
@@ -92,9 +92,7 @@ fig = go.Figure(
 )
 fig.update_xaxes(tickformat="+.0%", showgrid=True, gridcolor="#e1e0d9")
 fig.update_yaxes(showgrid=False)
-right.plotly_chart(
-    style(fig, 380, title="Next 8 weeks vs last 8 weeks, by category"), use_container_width=True, theme=None
-)
+right.plotly_chart(style(fig, 380, title="Next 8 weeks vs last 8 weeks, by category"), width="stretch", theme=None)
 
 st.divider()
 a, b = st.columns(2)
@@ -120,7 +118,7 @@ fig.update_yaxes(autorange="reversed", showgrid=False)
 fig.update_xaxes(tickformat=".0%", showgrid=True, gridcolor="#e1e0d9")
 a.plotly_chart(
     style(fig, 420, title="RFM segments: share of customers vs revenue", barmode="group"),
-    use_container_width=True,
+    width="stretch",
     theme=None,
 )
 
@@ -137,4 +135,4 @@ fig = go.Figure(
 )
 fig.update_xaxes(showgrid=True, gridcolor="#e1e0d9")
 fig.update_yaxes(showgrid=False)
-b.plotly_chart(style(fig, 420, title="Top categories by revenue (R$)"), use_container_width=True, theme=None)
+b.plotly_chart(style(fig, 420, title="Top categories by revenue (R$)"), width="stretch", theme=None)

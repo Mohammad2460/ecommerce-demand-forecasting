@@ -31,7 +31,7 @@ a.dataframe(
         }
     ),
     hide_index=True,
-    use_container_width=True,
+    width="stretch",
     height=390,
 )
 # Quintile scores give every R x M cell roughly equal counts, so colour by value instead.
@@ -52,7 +52,7 @@ fig = go.Figure(
 )
 b.plotly_chart(
     style(fig, 390, title="Average 12-month CLV by Recency × Monetary score (5 = best)"),
-    use_container_width=True,
+    width="stretch",
     theme=None,
 )
 st.caption(
@@ -76,7 +76,7 @@ fig = go.Figure(
 )
 fig.update_yaxes(autorange="reversed", showgrid=False)
 fig.update_xaxes(showgrid=True, gridcolor="#e1e0d9")
-a.plotly_chart(style(fig, 330, title="Cluster sizes"), use_container_width=True, theme=None)
+a.plotly_chart(style(fig, 330, title="Cluster sizes"), width="stretch", theme=None)
 show = prof.drop(columns=["cluster"]).set_index("cluster_name")
 fmt = {c: "{:.2f}" for c in show.columns} | {
     "customers": "{:,}",
@@ -87,7 +87,7 @@ fmt = {c: "{:.2f}" for c in show.columns} | {
 }
 b.dataframe(
     show.style.format(fmt),
-    use_container_width=True,
+    width="stretch",
 )
 if len(k_scores):
     best_k = int(k_scores.loc[k_scores["silhouette"].idxmax(), "k"])
@@ -100,5 +100,5 @@ st.divider()
 st.subheader("Segment × cluster")
 xt = cust.pivot_table(index="segment", columns="cluster_name", values="clv_12m", aggfunc="count", fill_value=0)
 xt = xt.reindex([s for s in seg["segment"] if s in xt.index])
-st.dataframe(xt.style.background_gradient(cmap="Blues", axis=None).format("{:,}"), use_container_width=True)
+st.dataframe(xt.style.background_gradient(cmap="Blues", axis=None).format("{:,}"), width="stretch")
 st.caption(f"Total 12-month revenue CLV across all customers: {brl(cust['clv_12m'].sum())}")

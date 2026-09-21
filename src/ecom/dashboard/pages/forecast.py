@@ -72,7 +72,7 @@ fig.add_scatter(
 )
 st.plotly_chart(
     style(fig, 420, title=f"{pretty(series)} · weekly units", hovermode="x unified"),
-    use_container_width=True,
+    width="stretch",
     theme=None,
 )
 
@@ -84,7 +84,7 @@ a.dataframe(
     .style.format({"wape": "{:.1%}", "smape": "{:.1%}", "mae": "{:.1f}", "rmse": "{:.1f}", "bias": "{:+.1%}"})
     .highlight_min(subset=["wape"], color="#cde2fb"),
     hide_index=True,
-    use_container_width=True,
+    width="stretch",
 )
 
 bt = table("forecast_backtest")
@@ -104,7 +104,7 @@ for i, mdl in enumerate(["naive", "ets_damped", "arima_111", "lightgbm"]):  # <=
 fig.update_yaxes(tickformat=".0%")
 fig.update_xaxes(title="weeks ahead", dtick=1)
 b.subheader("Backtest error by weeks ahead")
-b.plotly_chart(style(fig, 320, hovermode="x unified"), use_container_width=True, theme=None)
+b.plotly_chart(style(fig, 320, hovermode="x unified"), width="stretch", theme=None)
 
 with st.expander("Overall leaderboard (all series pooled) and LightGBM feature importance"):
     x, y = st.columns(2)
@@ -113,7 +113,7 @@ with st.expander("Overall leaderboard (all series pooled) and LightGBM feature i
             {"wape": "{:.1%}", "smape": "{:.1%}", "mae": "{:.1f}", "rmse": "{:.1f}", "bias": "{:+.1%}"}
         ),
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
     )
     fi = table("forecast_feature_importance").head(10).iloc[::-1]
     fig = go.Figure(
@@ -125,6 +125,6 @@ with st.expander("Overall leaderboard (all series pooled) and LightGBM feature i
             hovertemplate="%{y}: %{x:,.0f}<extra></extra>",
         )
     )
-    y.plotly_chart(style(fig, 320, title="Feature importance (gain)"), use_container_width=True, theme=None)
+    y.plotly_chart(style(fig, 320, title="Feature importance (gain)"), width="stretch", theme=None)
 
 st.download_button("Download all forecasts (CSV)", fc.to_csv(index=False), "forecasts.csv", "text/csv")

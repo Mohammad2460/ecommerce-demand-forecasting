@@ -73,7 +73,7 @@ with tab1:
     st.dataframe(
         out.style.format({"monetary": "R$ {:,.0f}", "p_repeat": "{:.2%}", "clv_12m": "R$ {:,.2f}"}),
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
         height=380,
     )
     st.download_button("Download matched customers (CSV)", view[cols].to_csv(index=False), "target_list.csv")
@@ -140,7 +140,7 @@ fig = go.Figure(
 )
 a.plotly_chart(
     style(fig, 380, title=f"What drives repeat purchase ({sel['model']}: {imp_label})"),
-    use_container_width=True,
+    width="stretch",
     theme=None,
 )
 by = cust.groupby("segment")["clv_12m"].mean().sort_values()
@@ -153,4 +153,4 @@ fig = go.Figure(
         hovertemplate="%{y}: R$ %{x:,.2f}<extra></extra>",
     )
 )
-b.plotly_chart(style(fig, 380, title="Average 12-month CLV by segment (R$)"), use_container_width=True, theme=None)
+b.plotly_chart(style(fig, 380, title="Average 12-month CLV by segment (R$)"), width="stretch", theme=None)
