@@ -13,3 +13,4 @@ data/processed/*
 models/*
 !models/.gitkeep
 *.egg-info/
+data/raw/*.zip
