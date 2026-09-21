@@ -31,6 +31,34 @@ NOTEBOOKS = {
                  "avg_days=('delivery_days','mean'), late_rate=('is_late','mean'), "
                  "review=('review_score','mean')).sort_values('orders', ascending=False).round(2).head(12)"),
     ],
+    "02_forecasting.ipynb": [
+        ("md", "# 02 · Demand Forecasting\nWeekly item demand for the top-15 categories plus the total. "
+               "Models: naive, seasonal naive, 4-week moving average, damped ETS, ARIMA(1,1,1), a global "
+               "LightGBM on lag/rolling/calendar features, and an ensemble. Evaluation: 3-fold expanding-window "
+               "backtest, 8-week horizon."),
+        ("code", SETUP + "\nimport matplotlib.pyplot as plt\nP = '../data/processed/'"),
+        ("code", "panel = pd.read_parquet(P + 'demand_weekly.parquet')\n"
+                 "panel.pivot(index='week', columns='series', values='y').tail()"),
+        ("md", "## Overall leaderboard (lower WAPE is better)"),
+        ("code", "pd.read_parquet(P + 'forecast_leaderboard.parquet').round(3)"),
+        ("md", "## Best model per series"),
+        ("code", "lb = pd.read_parquet(P + 'forecast_leaderboard_by_series.parquet')\n"
+                 "lb.sort_values('wape').drop_duplicates('series').round(3)"),
+        ("md", "## Error by horizon step"),
+        ("code", "from ecom.forecasting.evaluate import leaderboard\n"
+                 "bt = pd.read_parquet(P + 'forecast_backtest.parquet')\n"
+                 "leaderboard(bt, ['h', 'model']).pivot(index='h', columns='model', values='wape').round(3)"),
+        ("md", "## LightGBM feature importance (gain)"),
+        ("code", "pd.read_parquet(P + 'forecast_feature_importance.parquet').head(10)"),
+        ("md", "## Total demand: history and 8-week forecast (best model, 80% interval)"),
+        ("code", "fc = pd.read_parquet(P + 'forecast.parquet')\n"
+                 "s = '__total__'\nh = panel[panel.series == s]; f = fc[(fc.series == s) & fc.is_best]\n"
+                 "fig, ax = plt.subplots(figsize=(10, 3.8))\nax.plot(h.week, h.y, label='actual')\n"
+                 "ax.plot(f.week, f.yhat, label=f'forecast ({f.model.iloc[0]})')\n"
+                 "ax.fill_between(f.week, f.lower, f.upper, alpha=.25)\n"
+                 "ax.legend(); ax.set_title('Total weekly units')\n"
+                 "fig.savefig('../reports/figures/06_total_forecast.png', bbox_inches='tight')"),
+    ],
 }
 
 
