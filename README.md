@@ -84,3 +84,9 @@ curl -X POST localhost:8000/churn/score -H 'content-type: application/json' \
 - **Calibrated probabilities.** There is no class re-weighting, so repeat probabilities can feed CLV directly.
 - **Limitations** (short history, rare repeat purchases, revenue-only CLV) are discussed in
   [the report](docs/report.md#9-limitations-and-future-work).
+
+## Data & license
+
+Data: *Brazilian E-Commerce Public Dataset by Olist*, published on Kaggle under
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). The raw data is not included in this
+repository; `make data` downloads it. Only aggregate figures derived from it are committed.
