@@ -45,8 +45,23 @@ not hardcoded paths, or tests will leak into real outputs.
    2016 is sparse and order volume collapses from ~2018-08-20 in the Olist extract). Reviews and payments collapsed to one row per order.
 3. `data/warehouse.py` → star schema parquet (fact order items + customer/product/date dims).
 4. `features/`, `forecasting/`, `segmentation/`, `churn/`, `clv/`, `insights/` → models to `models/`
-   (joblib) and result tables to `data/processed/`.
-5. `api/` and `dashboard/` only read precomputed parquet/models — never train at request time.
+   (joblib) and result tables to `data/processed/`. `ecom/pipeline.py` orchestrates all stages
+   (`scripts/run_pipeline.py [warehouse forecasting customers insights]` runs a subset). The unified
+   `customers.parquet` joins features + RFM + cluster + churn risk + CLV.
+5. `api/` and `dashboard/` only read precomputed parquet/models via `api/store.py` (lru-cached; call
+   `store.clear()` or POST `/admin/reload` after re-running the pipeline) — never train at request time.
+   The dashboard is an `st.navigation` router (`dashboard/app.py`) over `dashboard/pages/*.py`; shared
+   theme/palette lives in `dashboard/common.py`, and charts pass `theme=None` so Streamlit doesn't override it.
+   The dashboard's what-if scorer calls the API's `churn_score` function directly (single source of logic).
+
+**Forecast outputs:** `forecast.parquet` holds every model's forecast for every series; `is_best` flags the
+per-series backtest winner (by WAPE). Intervals come from backtest relative-error quantiles, clamped so the
+band always contains the point forecast.
+
+**Churn model gotchas:** keep probabilities calibrated (no class weights / scale_pos_weight) because CLV
+multiplies them directly; the logistic pipeline log-transforms skewed spend/count features, otherwise single
+large orders dominate. Training cutoffs must end their 180-day label window before the test cutoff
+(`train_cutoffs`).
 
 **Olist data semantics that matter:**
 - `customer_id` is per-order; the real person is `customer_unique_id`. All customer analytics
