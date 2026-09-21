@@ -13,7 +13,7 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import average_precision_score, brier_score_loss, roc_auc_score
 from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import FunctionTransformer, StandardScaler
 
 from ecom.config import CHURN_WINDOW_DAYS, RANDOM_STATE
 from ecom.features.customer import customer_features
@@ -65,9 +65,21 @@ def _encode(feats: pd.DataFrame) -> pd.DataFrame:
     return feats
 
 
+SKEWED = ["frequency", "monetary", "avg_order_value", "avg_items", "avg_freight", "n_categories", "avg_installments"]
+
+
+def _log_skewed(X: pd.DataFrame) -> pd.DataFrame:
+    """Heavy right tails (e.g. one R$13k order) otherwise make the linear model extrapolate wildly."""
+    X = X.copy()
+    X[SKEWED] = np.log1p(X[SKEWED].clip(lower=0))
+    return X
+
+
 def make_models() -> dict[str, object]:
     return {
-        "logistic": make_pipeline(StandardScaler(), LogisticRegression(C=0.5, max_iter=2000)),
+        "logistic": make_pipeline(
+            FunctionTransformer(_log_skewed), StandardScaler(), LogisticRegression(C=0.5, max_iter=2000)
+        ),
         "lightgbm": lgb.LGBMClassifier(
             n_estimators=300, learning_rate=0.03, num_leaves=15, min_child_samples=50, subsample=0.8,
             subsample_freq=1, colsample_bytree=0.8, reg_lambda=5.0, random_state=RANDOM_STATE, verbose=-1,
